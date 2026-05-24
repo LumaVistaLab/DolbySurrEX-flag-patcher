@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """Patch the AC-3 Dolby Surround EX flag inside Blu-ray DD+ / E-AC-3 streams.
 
-The DMPS Blu-ray DD+ Atmos files in this repository are interleaved as:
+The Dolby Media Producer Suite v2.0 (DMPS v2.0) Blu-ray DD+ Atmos files in this
+repository are interleaved as:
 
     AC-3 core syncframe, 640 kb/s, 2560 bytes
     E-AC-3 dependent syncframe, 1024 kb/s, 4096 bytes
 
 MediaInfo reports "Format settings: Dolby Surround EX" from the AC-3 core
-extended bitstream information field `dsurexmod`.  DMPS 2.0 leaves that field
+extended bitstream information field `dsurexmod`.  DMPS v2.0 leaves that field
 at 0 for this 7.1 Lrs/Rrs + PLIIx downmix case; later DMPS output sets it to 2.
 
 This tool updates only that two-bit field and recomputes the two AC-3 CRC words.

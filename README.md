@@ -1,10 +1,10 @@
 # Dolby Surround EX Flag Patcher
 
 This repository contains a Python patcher for a specific Dolby Media Producer
-Suite 2.0 output case: Blu-ray Dolby Digital Plus with Dolby Atmos `.eb3`
-bitstreams whose 7.1 Lrs/Rrs audio core was authored with a `5.1 Dolby PLIIx`
-7.1-to-5.1 downmix, but whose AC-3 core metadata does not advertise Dolby
-Surround EX.
+Suite v2.0 (DMPS v2.0) output case: Blu-ray Dolby Digital Plus with Dolby
+Atmos `.eb3` bitstreams whose 7.1 Lrs/Rrs audio core was authored with a
+`5.1 Dolby PLIIx` 7.1-to-5.1 downmix, but whose AC-3 core metadata does not
+advertise Dolby Surround EX.
 
 The tool patches the AC-3 core `dsurexmod` field to the value MediaInfo reports
 as `Format settings: Dolby Surround EX`, then recomputes the AC-3 CRC words.
@@ -13,10 +13,11 @@ as `Format settings: Dolby Surround EX`, then recomputes the AC-3 CRC words.
 
 Use this patcher only when all of the following are true:
 
-- The source is a Blu-ray-profile Dolby Digital Plus / E-AC-3 `.eb3` bitstream,
-  with or without Dolby Atmos.
+- The source is a Blu-ray-profile Dolby Digital Plus with Dolby Atmos / E-AC-3
+  JOC `.eb3` bitstream.
 - The audio core channel configuration is `7.1 - L,R,C,LFE,Ls,Rs,Lrs,Rrs`.
-- The DMPS job used `7.1 to 5.1 Downmix: 5.1 Dolby PLIIx`, not `5.1 Standard`.
+- The DMPS v2.0 job used `7.1 to 5.1 Downmix: 5.1 Dolby PLIIx`, not
+  `5.1 Standard`.
 - The goal is to mark the backward-compatible 5.1 presentation as containing
   matrix-encoded rear surround information.
 
@@ -44,7 +45,7 @@ unit is 6656 bytes:
 - 2560-byte AC-3 core syncframe, 640 kb/s
 - 4096-byte E-AC-3 dependent/JOC syncframe, 1024 kb/s
 
-This matches the way DMPS presents Dolby Digital Plus Blu-ray jobs: a
+This matches the way DMPS v2.0 presents Dolby Digital Plus Blu-ray jobs: a
 backward-compatible audio core is selected on the Channels page, and for Atmos
 DD+ bitstreams the 5.1 core is produced by rendering Atmos to 7.1, then
 downmixing the four surround channels to the two 5.1 surround channels. The
@@ -66,8 +67,8 @@ dsurexmod=<target>
 `Escape.eb3` has `dsurexmod=2` in every AC-3 core frame, which MediaInfo reports
 as `Format settings: Dolby Surround EX`.
 
-`Sol Levante.eb3` has `dsurexmod=0` in every AC-3 core frame. Because its DMPS
-job used `5.1 Dolby PLIIx`, this repository treats `Escape.eb3` as the
+`Sol Levante.eb3` has `dsurexmod=0` in every AC-3 core frame. Because its
+DMPS v2.0 job used `5.1 Dolby PLIIx`, this repository treats `Escape.eb3` as the
 reference writer behavior and patches `Sol Levante.eb3` to the same
 `dsurexmod=2` state.
 
@@ -128,11 +129,11 @@ Digital Plus with Dolby Atmos, the manual says the backward-compatible
 presentation is set with `Audio Core Channel Configuration`.
 
 [2] Dolby Media Encoder User's Manual, Section 4.1.4, "Setting the 5.1 Downmix
-Type on the Channels Page", printed pp. 18-19 / PDF pp. 28-29, and Section 4.5,
-"Creating a Dolby Digital Plus Bitstream with or without Dolby Atmos", printed
-p. 33 / PDF p. 43. These sections state that the 5.1 core is produced by
-rendering Atmos to 7.1 when needed and downmixing the 7.1 surround channels to
-5.1, with `5.1 Dolby Standard (Lo, Ro)` and `5.1 Dolby PLIIx` as the choices.
+Type on the Channels Page", printed pp. 18-19 / PDF pp. 28-29, and Section 4.5
+Dolby Digital Plus workflow, printed p. 33 / PDF p. 43. These sections state
+that the 5.1 core is produced by rendering Atmos to 7.1 when needed and
+downmixing the 7.1 surround channels to 5.1, with `5.1 Dolby Standard (Lo, Ro)`
+and `5.1 Dolby PLIIx` as the choices.
 
 [3] Dolby Media Encoder User's Manual, Section 11.11, "Dolby Pro Logic IIx",
 printed pp. 94-95 / PDF pp. 104-105. This section defines PLIIx as a matrix
