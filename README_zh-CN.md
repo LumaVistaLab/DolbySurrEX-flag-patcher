@@ -34,6 +34,7 @@ DolbySurrEX-flag-patcher/
 |-- .gitignore                               排除本地安装包、工作区文件和 Python 缓存输出。
 |-- Dolby_Media_Encoder_User's_Manual.pdf    Dolby Media Encoder 手册，用于文档中的参考资料。
 |-- Sol Levante.png                          PLIIx 样例编码所用的 DMPS v2.0 设置截图。
+|-- Encoder Setup.png                        当前样例编码所用的 DMPS v2.0 Encoder Setup 截图。
 |-- Escape.eb3                               参考 DD+ Atmos 样例，其 AC-3 核心已声明 EX。
 |-- Sol Levante.eb3                          补丁前的源 DD+ Atmos 样例。
 `-- Sol Levante.dsur-ex.eb3                  dsurexmod 已设为 EX 的补丁后样例输出。
@@ -63,6 +64,12 @@ Dolby TrueHD、Dolby Digital Plus 或 Dolby Digital 5.1 声道表示，用来指
 `Sol Levante.png` 展示了样例输出所用的 DMPS v2.0 设置：
 
 ![DMPS v2.0 声道设置：7.1 Lrs/Rrs 核心与 5.1 Dolby PLIIx 下混](Sol%20Levante.png)
+
+当前 `Sol Levante.eb3` 样例已使用启用
+`Encoder Setup > Preprocessing > Apply Magnetic Centroid` 的设置重新编码。
+该设置见 `Encoder Setup.png`：
+
+![DMPS v2.0 Encoder Setup 预处理设置：启用 Apply Magnetic Centroid](Encoder%20Setup.png)
 
 不要把本工具当成通用 DD+ 或 Atmos 修复工具。如果编码使用的是
 `5.1 Standard (Lo, Ro)` 下混，设置 EX 标志会错误描述该码流。

@@ -35,6 +35,7 @@ DolbySurrEX-flag-patcher/
 |-- .gitignore                               Ignores local installers, the workspace file, and Python cache output.
 |-- Dolby_Media_Encoder_User's_Manual.pdf    Dolby Media Encoder manual used for the documented references.
 |-- Sol Levante.png                          DMPS v2.0 setup screenshot for the PLIIx sample encode.
+|-- Encoder Setup.png                        DMPS v2.0 Encoder Setup screenshot for the current sample encode.
 |-- Escape.eb3                               Reference DD+ Atmos sample whose AC-3 cores already advertise EX.
 |-- Sol Levante.eb3                          Source DD+ Atmos sample before patching.
 `-- Sol Levante.dsur-ex.eb3                  Patched sample output with dsurexmod set to EX.
@@ -68,6 +69,12 @@ and [4].
 `Sol Levante.png` shows the DMPS v2.0 setup used for the sample output:
 
 ![DMPS v2.0 channel setup: 7.1 Lrs/Rrs core and 5.1 Dolby PLIIx downmix](Sol%20Levante.png)
+
+The current `Sol Levante.eb3` sample was regenerated with
+`Encoder Setup > Preprocessing > Apply Magnetic Centroid` enabled. The setting
+is shown in `Encoder Setup.png`:
+
+![DMPS v2.0 Encoder Setup preprocessing with Apply Magnetic Centroid enabled](Encoder%20Setup.png)
 
 Do not use this as a generic DD+ or Atmos repair tool. If the encode used
 `5.1 Standard (Lo, Ro)` downmixing, setting the EX flag would misrepresent the
