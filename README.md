@@ -1,5 +1,7 @@
 # Dolby Surround EX Flag Patcher
 
+Language: English | [简体中文](README_zh-CN.md)
+
 This repository contains a Python patcher for a specific Dolby Media Producer
 Suite v2.0 (DMPS v2.0) output case: Blu-ray Dolby Digital Plus with Dolby
 Atmos `.eb3` bitstreams whose 7.1 Lrs/Rrs audio core was authored with a
@@ -8,6 +10,40 @@ advertise Dolby Surround EX.
 
 The tool patches the AC-3 core `dsurexmod` field to the value MediaInfo reports
 as `Format settings: Dolby Surround EX`, then recomputes the AC-3 CRC words.
+
+---
+
+## Contents
+
+- [Repository Layout](#repository-layout)
+- [Use Case and Prerequisite](#use-case-and-prerequisite)
+- [Observed Bitstream Structure](#observed-bitstream-structure)
+- [Usage](#usage)
+- [Verification Run](#verification-run)
+- [References](#references)
+
+---
+
+## Repository Layout
+
+```text
+DolbySurrEX-flag-patcher/
+|-- patch_dsur_ex.py                         AC-3 core dsurexmod patcher and scanner.
+|-- README.md                                English documentation.
+|-- README_zh-CN.md                          Simplified Chinese documentation.
+|-- LICENSE
+|-- .gitignore                               Ignores local installers, the workspace file, and Python cache output.
+|-- Dolby_Media_Encoder_User's_Manual.pdf    Dolby Media Encoder manual used for the documented references.
+|-- Sol Levante.png                          DMPS v2.0 setup screenshot for the PLIIx sample encode.
+|-- Escape.eb3                               Reference DD+ Atmos sample whose AC-3 cores already advertise EX.
+|-- Sol Levante.eb3                          Source DD+ Atmos sample before patching.
+`-- Sol Levante.dsur-ex.eb3                  Patched sample output with dsurexmod set to EX.
+```
+
+`Dolby Media Producer Suite 2.0-2976134.pkg`, `Dolby Media Producer Suite 2.5-5200991.dmg`,
+`DolbySurrEX-flag-patcher.code-workspace`, and `__pycache__/` are intentionally
+ignored. Keep those paths for local installers, editor settings, or generated
+caches; the tracked repository layout above is the active patcher package.
 
 ## Use Case and Prerequisite
 
