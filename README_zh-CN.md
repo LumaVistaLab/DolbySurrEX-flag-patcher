@@ -9,6 +9,8 @@ Atmos `.eb3` 码流，其 7.1 Lrs/Rrs 音频核心使用 `5.1 Dolby PLIIx`
 
 该工具会把 AC-3 核心中的 `dsurexmod` 字段改为 MediaInfo 报告
 `Format settings: Dolby Surround EX` 时对应的值，并重新计算 AC-3 CRC 字。
+仓库还包含 `extract_eb3_core.py`；这是一个仅依赖 Python 标准库的工具，用于从
+`.eb3` 文件中提取向后兼容的 AC-3 帧。
 
 ---
 
@@ -28,6 +30,7 @@ Atmos `.eb3` 码流，其 7.1 Lrs/Rrs 音频核心使用 `5.1 Dolby PLIIx`
 ```text
 DolbySurrEX-flag-patcher/
 |-- patch_dsur_ex.py                         AC-3 核心 dsurexmod 补丁与扫描工具。
+|-- extract_eb3_core.py                      批量提取同目录 .eb3 文件的 AC-3 核心。
 |-- README.md                                英文文档。
 |-- README_zh-CN.md                          简体中文文档。
 |-- LICENSE
@@ -112,6 +115,10 @@ E-AC-3 dependent/JOC 帧不会被修改。
 
 ## 使用方法
 
+两个脚本均要求 Python 3.10 或更高版本，不依赖第三方软件包。
+
+### 检查或修补 EX 标志
+
 仅扫描：
 
 ```powershell
@@ -126,6 +133,30 @@ python .\patch_dsur_ex.py "Sol Levante.eb3" "Sol Levante.dsur-ex.eb3"
 
 如果某个 AC-3 核心帧不符合预期的 `bsid=6`、`acmod=7`、`lfeon=1`、`xbsi2e=1`
 结构，或者输入 AC-3 CRC 已经无效，工具会拒绝补丁。
+
+### 提取 AC-3 核心
+
+不带参数运行提取工具，它会处理脚本所在目录中的所有 `.eb3` 文件：
+
+```powershell
+python .\extract_eb3_core.py
+```
+
+对于每个源文件，工具会依次解析连续的 AC-3/E-AC-3 syncframe，把 AC-3 帧按原顺序
+写入同名 `.ac3` 文件，并跳过 E-AC-3 帧。它只扫描脚本所在的单个目录，不递归扫描，
+也不会修改源 `.eb3` 文件。
+
+输出会先写入目标目录中的临时文件。如果同名 `.ac3` 已包含相同的提取结果，工具会报告
+内容相同且不改写；如果现有内容不同，则默认拒绝替换。需要覆盖时使用 `--force`（或 `-f`）：
+
+```powershell
+python .\extract_eb3_core.py --force
+```
+
+syncframe 流截断或格式错误、流中没有 AC-3 帧，或者未使用 `--force` 时输出文件发生冲突，
+都会被报告为失败。工具仍会继续处理其余 `.eb3` 文件；只要有任一源文件失败，命令就以
+状态码 1 退出。该提取工具只检查 syncframe 帧头与边界；与 `patch_dsur_ex.py` 不同，
+它不验证 AC-3 CRC 或 Dolby 元数据字段。
 
 ## 验证运行
 

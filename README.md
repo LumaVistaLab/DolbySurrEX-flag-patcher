@@ -10,6 +10,8 @@ advertise Dolby Surround EX.
 
 The tool patches the AC-3 core `dsurexmod` field to the value MediaInfo reports
 as `Format settings: Dolby Surround EX`, then recomputes the AC-3 CRC words.
+The repository also includes `extract_eb3_core.py`, a standard-library-only
+utility that extracts the backward-compatible AC-3 frames from `.eb3` files.
 
 ---
 
@@ -29,6 +31,7 @@ as `Format settings: Dolby Surround EX`, then recomputes the AC-3 CRC words.
 ```text
 DolbySurrEX-flag-patcher/
 |-- patch_dsur_ex.py                         AC-3 core dsurexmod patcher and scanner.
+|-- extract_eb3_core.py                      Batch AC-3 core extractor for adjacent .eb3 files.
 |-- README.md                                English documentation.
 |-- README_zh-CN.md                          Simplified Chinese documentation.
 |-- LICENSE
@@ -121,6 +124,10 @@ CRC1 word at core bytes 2-3. The E-AC-3 dependent/JOC frames are not modified.
 
 ## Usage
 
+Both scripts require Python 3.10 or later and use no third-party packages.
+
+### Inspect or patch the EX flag
+
 Scan only:
 
 ```powershell
@@ -136,6 +143,36 @@ python .\patch_dsur_ex.py "Sol Levante.eb3" "Sol Levante.dsur-ex.eb3"
 The tool refuses to patch if an AC-3 core frame does not match the expected
 `bsid=6`, `acmod=7`, `lfeon=1`, `xbsi2e=1` structure, or if input AC-3 CRCs are
 already invalid.
+
+### Extract AC-3 cores
+
+Run the extractor without arguments to process every `.eb3` file in the
+directory containing the script:
+
+```powershell
+python .\extract_eb3_core.py
+```
+
+For each source, it parses the consecutive AC-3/E-AC-3 syncframes, writes the
+AC-3 frames in their original order to a same-basename `.ac3` file, and skips
+the E-AC-3 frames. It scans only that one directory, does not recurse, and does
+not modify the source `.eb3` files.
+
+Output is created through a temporary file in the destination directory. If a
+same-name `.ac3` already has the extracted content, the script reports it as
+unchanged. If the existing content differs, the script refuses to replace it
+unless `--force` (or `-f`) is supplied:
+
+```powershell
+python .\extract_eb3_core.py --force
+```
+
+A truncated or malformed syncframe stream, a stream with no AC-3 frames, or a
+conflicting output without `--force` is reported as a failure. The remaining
+`.eb3` files are still processed, and the command exits with status 1 if any
+source failed. This extractor checks syncframe headers and boundaries only;
+unlike `patch_dsur_ex.py`, it does not validate AC-3 CRCs or Dolby metadata
+fields.
 
 ## Verification Run
 
